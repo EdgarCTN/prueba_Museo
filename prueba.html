@@ -29,8 +29,17 @@
     <a-entity gltf-model="#model_4-glb" position="75 0.1 -37" scale="1 1 1.1" rotation="0 0 0" static-body></a-entity>
 
     <!-- Cámara -->
-    <a-entity id="camara" camera look-controls position="0 3 0"></a-entity>
-
+    <a-entity id="camara" camera look-controls wasd-controls position="0 3 0">
+      <a-entity
+        oculus-touch-controls
+        hand="left">
+      </a-entity>
+      <a-entity
+        oculus-touch-controls
+        hand="right">
+      </a-entity>
+    </a-entity>
+    
     <!-- Mapa interactivo -->
     <a-entity id="mapa" position="0 2 -2">
       <a-plane 
