@@ -6,7 +6,7 @@
   <title>Escena en A-Frame</title>
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@3.3.0/dist/aframe-physics-system.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/aframe-extras/dist/aframe-extras.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
 </head>
 <body>
   <a-scene physics="gravity: -9.8">
@@ -18,18 +18,13 @@
 
     <!-- Assets -->
     <a-assets>
-      <!-- Modelos 3D -->
       <a-asset-item id="model-glb" src="assets/Segundo.glb"></a-asset-item>
       <a-asset-item id="model_2-glb" src="assets/santo_Domingo.glb"></a-asset-item>
       <a-asset-item id="model_3-glb" src="assets/Huaca.glb"></a-asset-item>
       <a-asset-item id="model_4-glb" src="assets/puente_Piedra.glb"></a-asset-item>
-      
-      <!-- Audios -->
       <audio id="cancion1" src="audio/cancion1.mp3"></audio>
       <audio id="cancion2" src="audio/cancion2.mp3"></audio>
       <audio id="cancion3" src="audio/cancion3.mp3"></audio>
-
-      <!-- Imágenes -->
       <img id="img1" src="imagenes/image1.jpg">
       <img id="img2" src="imagenes/image2.jpg">
       <img id="img3" src="imagenes/image3.jpg">
@@ -41,35 +36,16 @@
     <a-entity gltf-model="#model_3-glb" position="0 0.1 70" scale="0.7 0.7 0.7" rotation="0 90 0" static-body></a-entity>
     <a-entity gltf-model="#model_4-glb" position="75 0.1 -37" scale="1 1 1.1" rotation="0 0 0" static-body></a-entity>
 
-    <!-- Cámara con controles de orientación -->
-    <a-entity id="camara" 
-              camera 
-              look-controls 
-              wasd-controls="enabled: false" 
-              device-orientation-controls>
+    <!-- Cámara con movimiento físico -->
+    <a-entity 
+      id="camara" 
+      camera 
+      look-controls 
+      position="0 3 0"
+      movement-controls="fly: true; controls: checkpoint;">
     </a-entity>
+
+    <a-entity cursor="rayOrigin: mouse" raycaster="objects: .raycastable"></a-entity>
   </a-scene>
-
-  <script>
-    // Este script permite que el usuario se mueva hacia adelante basado en el acelerómetro
-    const moveSpeed = 0.05; // Velocidad del movimiento
-
-    document.querySelector('#camara').addEventListener('componentinitialized', () => {
-      window.addEventListener('devicemotion', (event) => {
-        const acceleration = event.accelerationIncludingGravity;
-        const entity = document.querySelector('#camara');
-        const position = entity.getAttribute('position');
-
-        if (acceleration.y > 1) { // Si el usuario inclina el dispositivo hacia adelante
-          position.z -= moveSpeed;
-        } else if (acceleration.y < -1) { // Inclina hacia atrás
-          position.z += moveSpeed;
-        }
-
-        entity.setAttribute('position', position);
-      });
-    });
-  </script>
 </body>
 </html>
-
