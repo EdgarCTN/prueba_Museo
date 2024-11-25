@@ -33,9 +33,9 @@ AFRAME.registerComponent('mapa-interactivo', {
       const botones = [
         { id: `${data.idMapa}_Convento`, material: '#santoDomingoPoster', color: '#69D4FF', pos: '0 0.55 0', destino: { x: 0, y: 3, z: -55 } },
         { id: `${data.idMapa}_Centro`, material: '#centroPoster', color: '#FC5182', pos: '0 0 0', destino: { x: 0, y: 3, z: 0 } },
-        { id: `${data.idMapa}_Puente`, material: '#puentePiedraPoster', color: '#69D4FF', pos: '0.85 0 0', destino: { x: 50, y: 3, z: 0 } },        
-        { id: `${data.idMapa}_Huaca`, material: '#huallamarcaPoster', color: '#69D4FF', pos: '0 -0.55 0', destino: { x: -50, y: 3, z: 0 } },
-        { id: `${data.idMapa}_Francis`, material: '#franciscoPoster', color: '#69D4FF', pos: '-0.85 0 0', destino: { x: 0, y: 3, z: 55 } }
+        { id: `${data.idMapa}_Puente`, material: '#puentePiedraPoster', color: '#69D4FF', pos: '0.85 0 0', destino: { x: 50, y: 3, z: 0 } },  
+        { id: `${data.idMapa}_Huaca`, material: '#huallamarcaPoster', color: '#69D4FF', pos: '0 -0.55 0', destino: { x: 0, y: 3, z: 55 } },
+        { id: `${data.idMapa}_Francis`, material: '#franciscoPoster', color: '#69D4FF', pos: '-0.85 0 0', destino: { x: -50, y: 3, z: 0} }
 
       ];
   
