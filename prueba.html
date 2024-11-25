@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mapa interactivo en A-Frame</title>
+  <title>Mapa Interactivo en A-Frame</title>
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@3.3.0/dist/aframe-physics-system.min.js"></script>
+  <script src="teletransporte.js"></script>
 </head>
 <body>
   <a-scene physics="gravity: -9.8">
@@ -16,92 +17,50 @@
 
     <!-- Assets -->
     <a-assets>
-      <a-asset-item id="model-glb" src="assets/Segundo.glb"></a-asset-item>
+      <a-asset-item id="model-glb" src="assets/museo_Grupo_3.glb"></a-asset-item>
       <a-asset-item id="model_2-glb" src="assets/santo_Domingo.glb"></a-asset-item>
       <a-asset-item id="model_3-glb" src="assets/Huaca.glb"></a-asset-item>
       <a-asset-item id="model_4-glb" src="assets/puente_Piedra.glb"></a-asset-item>
+      <a-asset-item id="model_5-glb" src="assets/matenme.glb"></a-asset-item>
+      <a-asset-item id="model_6-glb" src="assets/francis.glb"></a-asset-item>
+
+      <img id="puentePiedra" src="imagenes/puentePiedra1.jpg" />
+      <img id="puentePiedraPoster" src="imagenes/puentePiedra_Poster.jpg" />
+      <img id="huallamarca" src="imagenes/huaca1.jpg" />
+      <img id="huallamarcaPoster" src="imagenes/huaca_Poster.jpg" />
+      <img id="santoDomingo" src="imagenes/santoDomingo.jpg" />
+      <img id="santoDomingoPoster" src="imagenes/santoDomingoPoster.jpg" />
+      <img id="textura_Panel" src="imagenes/textura_Panel.jpg" />
+      <img id="franciscoPoster" src="imagenes/francisco_Poster.png" />
+      <img id="limaPoster" src="imagenes/lima.png" />
+      <img id="centroPoster" src="imagenes/centro.jpg" />
     </a-assets>
 
     <!-- Modelos en la escena -->
     <a-entity gltf-model="#model-glb" position="0 0 0" scale="1 1 1" static-body></a-entity>
-    <a-entity gltf-model="#model_2-glb" position="0 0.1 -70" scale="0.3 0.3 0.3" rotation="0 135 0" static-body></a-entity>
+    <a-entity gltf-model="#model_2-glb" position="0 0.1 -70" scale="0.2 0.2 0.2" rotation="0 135 0" static-body></a-entity>
     <a-entity gltf-model="#model_3-glb" position="0 0.1 70" scale="0.7 0.7 0.7" rotation="0 90 0" static-body></a-entity>
     <a-entity gltf-model="#model_4-glb" position="75 0.1 -37" scale="1 1 1.1" rotation="0 0 0" static-body></a-entity>
 
+    <!-- Mapas interactivos -->
+          <!-- Mapa de la huaca -->
+    <a-entity mapa-interactivo="idMapa: mapa1; position: 0 3 58; rotation: 0 180 0"></a-entity>
+        <!-- Mapa del convento santo domingo -->
+    <a-entity mapa-interactivo="idMapa: mapa2; position: 0 3 -58; rotation: 0 0 0"></a-entity>
+        <!-- Mapa del centro -->
+    <a-entity mapa-interactivo="idMapa: mapa3; position: 0 3 -2; rotation: 0 0 0"></a-entity>
+            <!-- Mapa de puente de piedra -->
+    <a-entity mapa-interactivo="idMapa: mapa4; position: 58 3 0; rotation: 0 270 0"></a-entity>
+            <!-- Mapa de puente de san francisco -->
+    <a-entity mapa-interactivo="idMapa: mapa5; position: -55 3 0; rotation: 0 90 0"></a-entity>
     <!-- Cámara -->
     <a-entity id="camara" camera look-controls wasd-controls position="0 3 0">
-      <a-entity
-        oculus-touch-controls
-        hand="left">
-      </a-entity>
-      <a-entity
-        oculus-touch-controls
-        hand="right">
-      </a-entity>
-    </a-entity>
-    
-    <!-- Mapa interactivo -->
-    <a-entity id="mapa" position="0 2 -2">
-      <a-plane 
-        color="#333333" 
-        height="2" 
-        width="3" 
-        position="0 0 -0.01">
-      </a-plane>
-      <a-text value="Mapa Interactivo" color="#FFFFFF" position="0 1.1 0" align="center"></a-text>
-
-      <!-- Botones de teletransporte -->
-      <a-entity id="boton1" position="-1 0.5 0">
-        <a-plane 
-          id="inicio" 
-          color="#FF5555" 
-          height="0.5" 
-          width="0.8" 
-          class="raycastable">
-        </a-plane>
-        <a-text value="Inicio" color="#FFFFFF" position="0 0 0.1" align="center"></a-text>
-      </a-entity>
-
-      <a-entity id="boton2" position="0 0.5 0">
-        <a-plane 
-          id="santoDomingo" 
-          color="#55FF55" 
-          height="0.5" 
-          width="0.8" 
-          class="raycastable">
-        </a-plane>
-        <a-text value="Santo Domingo" color="#FFFFFF" position="0 0 0.1" align="center"></a-text>
-      </a-entity>
-
-      <a-entity id="boton3" position="1 0.5 0">
-        <a-plane 
-          id="puentePiedra" 
-          color="#5555FF" 
-          height="0.5" 
-          width="0.8" 
-          class="raycastable">
-        </a-plane>
-        <a-text value="Puente Piedra" color="#FFFFFF" position="0 0 0.1" align="center"></a-text>
-      </a-entity>
+      <a-entity oculus-touch-controls hand="left"></a-entity>
+      <a-entity oculus-touch-controls hand="right"></a-entity>
     </a-entity>
 
     <!-- Cursor -->
     <a-entity cursor="rayOrigin: mouse" raycaster="objects: .raycastable"></a-entity>
   </a-scene>
-
-  <script>
-    // Función para teletransportar la cámara
-    function teletransportar(id, posicion) {
-      document.querySelector(id).addEventListener('click', () => {
-        const camara = document.querySelector('#camara');
-        camara.setAttribute('position', posicion);
-      });
-    }
-
-    // Configuración de botones
-    teletransportar('#inicio', { x: 0, y: 3, z: 0 });
-    teletransportar('#santoDomingo', { x: 0, y: 3, z: -70 });
-    teletransportar('#puentePiedra', { x: 75, y: 3, z: -37 });
-  </script>
 </body>
 </html>
