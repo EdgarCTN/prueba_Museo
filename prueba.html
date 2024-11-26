@@ -7,6 +7,7 @@
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@3.3.0/dist/aframe-physics-system.min.js"></script>
   <script src="teletransporte.js"></script>
+  <script src="controladorCanciones.js"></script>
 </head>
 <body>
   <a-scene physics="gravity: -9.8">
@@ -15,6 +16,29 @@
     <a-light type="directional" color="#ffffff" intensity="1" position="0 10 10"></a-light>
     <a-sky color="#AAAAFF"></a-sky>
 
+    <!-- Assets -->
+    <a-assets>
+      <audio id="song1" src="audio/cancion1.mp3"></audio>
+      <audio id="song2" src="audio/cancion2.mp3"></audio>
+      <audio id="song3" src="audio/cancion3.mp3"></audio>
+      <audio id="song4" src="audio/puentePiedra.mp3"></audio>
+
+      <img id="boton_Disco" src="imagenes/boton_Disco.png" />
+      <img id="musica_Fondo" src="imagenes/musica_Fondo.jpg" />
+      <img id="puentePiedra" src="imagenes/puentePiedra1.jpg" />
+      <img id="puentePiedraPoster" src="imagenes/puentePiedra_Poster.jpg" />
+      <img id="huallamarca" src="imagenes/huaca1.jpg" />
+      <img id="huallamarcaPoster" src="imagenes/huaca_Poster.jpg" />
+      <img id="santoDomingo" src="imagenes/santoDomingo.jpg" />
+      <img id="santoDomingoPoster" src="imagenes/santoDomingoPoster.jpg" />
+      <img id="textura_Mapa" src="imagenes/mapa_Fondo.jpg" />
+      <img id="franciscoPoster" src="imagenes/francisco_Poster.png" />
+      <img id="limaPoster" src="imagenes/lima.png" />
+      <img id="centroPoster" src="imagenes/centro.jpg" />
+
+
+
+    </a-assets>
     <!-- Assets -->
     <a-assets>
       <a-asset-item id="model-glb" src="assets/museo_Grupo_3.glb"></a-asset-item>
@@ -33,7 +57,7 @@
       <img id="textura_Panel" src="imagenes/textura_Panel.jpg" />
       <img id="franciscoPoster" src="imagenes/francisco_Poster.png" />
       <img id="limaPoster" src="imagenes/lima.png" />
-      <img id="centroPoster" src="imagenes/centro.jpg" />
+      <img id="brujula" src="imagenes/brujula.png" />
     </a-assets>
 
     <!-- Modelos en la escena -->
@@ -41,18 +65,28 @@
     <a-entity gltf-model="#model_2-glb" position="0 0.1 -70" scale="0.2 0.2 0.2" rotation="0 135 0" static-body></a-entity>
     <a-entity gltf-model="#model_3-glb" position="0 0.1 70" scale="0.7 0.7 0.7" rotation="0 90 0" static-body></a-entity>
     <a-entity gltf-model="#model_4-glb" position="75 0.1 -37" scale="1 1 1.1" rotation="0 0 0" static-body></a-entity>
+    <a-entity gltf-model="#model_6-glb" position="-75 0.1 -5" scale="0.2 0.2 0.2" rotation="0 135 0" static-body></a-entity>
 
-    <!-- Mapas interactivos -->
-          <!-- Mapa de la huaca -->
-    <a-entity mapa-interactivo="idMapa: mapa1; position: 0 3 58; rotation: 0 180 0"></a-entity>
-        <!-- Mapa del convento santo domingo -->
-    <a-entity mapa-interactivo="idMapa: mapa2; position: 0 3 -58; rotation: 0 0 0"></a-entity>
-        <!-- Mapa del centro -->
-    <a-entity mapa-interactivo="idMapa: mapa3; position: 0 3 -2; rotation: 0 0 0"></a-entity>
-            <!-- Mapa de puente de piedra -->
-    <a-entity mapa-interactivo="idMapa: mapa4; position: 58 3 0; rotation: 0 270 0"></a-entity>
-            <!-- Mapa de puente de san francisco -->
-    <a-entity mapa-interactivo="idMapa: mapa5; position: -55 3 0; rotation: 0 90 0"></a-entity>
+    <!-- Paneles de control de canciones -->
+          <!--  huaca -->
+    <a-entity controlador-canciones="id: panel1; position: -5 3 50; rotation: 0 120 0; songs: #song1, #song2, #song3"></a-entity>
+    <a-entity mapa-interactivo="idMapa: mapa1; position: -5.9 3 47; rotation: 0 90 0"></a-entity>
+
+          <!--  Convento santo domingo -->
+    <a-entity controlador-canciones="id: panel2; position:  5 3 -50; rotation: 0 -60 0; songs: #song1, #song2, #song4"></a-entity>
+    <a-entity mapa-interactivo="idMapa: mapa2; position: 5.9 3 -47; rotation: 0 -90 0"></a-entity>
+
+          <!--  Puente de piedra -->
+    <a-entity controlador-canciones="id: panel3; position: 50 3 5; rotation: 0 -150 0; songs: #song2, #song3, #song4"></a-entity>
+    <a-entity mapa-interactivo="idMapa: mapa4; position: 47 3 5.9; rotation: 0 180 0"></a-entity>
+
+          <!--  San francisco -->
+    <a-entity controlador-canciones="id: panel4; position: -50 3 -5; rotation: 0 30 0; songs: #song1, #song3, #song4"></a-entity>
+    <a-entity mapa-interactivo="idMapa: mapa5; position: -47 3 -5.9; rotation: 0 0 0"></a-entity>
+
+          <!-- Mapa del centro -->
+      <a-entity mapa-interactivo="idMapa: mapa3; position: 0 3 -2; rotation: 0 0 0"></a-entity>
+
     <!-- Cámara -->
     <a-entity id="camara" camera look-controls wasd-controls position="0 3 0">
       <a-entity oculus-touch-controls hand="left"></a-entity>
