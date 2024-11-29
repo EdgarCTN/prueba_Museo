@@ -2,12 +2,10 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-inspector@^0.9.3/dist/aframe-inspector.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.8.1/dist/nipplejs.min.js"></script>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.0/nipplejs.min.js"></script>
-
     <script src="script_Paneles/highlight.js"></script>
     <script src="script_Paneles/info-panel.js"></script>
     <script src="script_Paneles/panel_auxiliar.js"></script>
@@ -183,13 +181,7 @@
         class="raycastable"
       ></a-entity>
 
-      <!-- Cámara -->
-      <a-entity
-        position="0 1.6 0"
-        camera
-        look-controls="magicWindowTrackingEnabled: false; touchEnabled: true; mouseEnabled: true"
-        wasd-controls
-      >
+
         <a-entity
           id="fadeBackground"
           geometry="primitive: sphere; radius: 2.5"
