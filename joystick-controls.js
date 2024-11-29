@@ -1,6 +1,7 @@
 // Variables globales
 let camera, joystick;
 let moveDirection = { x: 0, z: 0 };
+const moveSpeed = 0.05; // Velocidad base de movimiento
 
 // Detectar si es móvil
 function isMobile() {
@@ -22,25 +23,28 @@ function initJoystick() {
   // Manejar los movimientos del joystick
   joystick.on("move", (event, data) => {
     if (data && data.angle && data.distance) {
-      calculateMoveDirection(data.angle.degree, data.distance / 100);
+      const angle = data.angle.degree; // Ángulo en grados
+      const speed = data.distance / 100; // Velocidad proporcional a la distancia
+      calculateMoveDirection(angle, speed);
     }
   });
 
+  // Detener el movimiento cuando se suelta el joystick
   joystick.on("end", () => {
     stopMovement();
   });
 
+  // Iniciar el movimiento continuo
   startMovement();
 }
 
 // Calcular la dirección del movimiento
 function calculateMoveDirection(angle, speed) {
   const radian = (angle * Math.PI) / 180; // Convertir ángulo a radianes
-  const scaledSpeed = speed || 0.1; // Escalar la velocidad basado en la distancia
 
-  // Calcular el vector de movimiento
-  moveDirection.x = Math.cos(radian) * scaledSpeed;
-  moveDirection.z = Math.sin(radian) * scaledSpeed;
+  // Calcular los componentes X y Z del movimiento
+  moveDirection.x = Math.sin(radian) * moveSpeed * speed;
+  moveDirection.z = Math.cos(radian) * moveSpeed * speed;
 }
 
 // Detener el movimiento
@@ -49,9 +53,9 @@ function stopMovement() {
   moveDirection.z = 0;
 }
 
-// Iniciar el movimiento continuo
+// Mover la cámara continuamente
 function startMovement() {
-  const moveInterval = 10; // Intervalo en milisegundos
+  const moveInterval = 10; // Intervalo de movimiento en milisegundos
   setInterval(() => {
     if (moveDirection.x !== 0 || moveDirection.z !== 0) {
       moveCamera();
@@ -59,18 +63,15 @@ function startMovement() {
   }, moveInterval);
 }
 
-// Mover la cámara
+// Aplicar el movimiento a la cámara
 function moveCamera() {
-  // Obtener la dirección de la cámara en el mundo
-  const cameraDirection = new THREE.Vector3();
-  camera.object3D.getWorldDirection(cameraDirection);
-
-  // Calcular nueva posición
   const position = camera.getAttribute("position");
-  position.x += moveDirection.x * cameraDirection.z - moveDirection.z * cameraDirection.x;
-  position.z += moveDirection.z * cameraDirection.z + moveDirection.x * cameraDirection.x;
 
-  // Actualizar la posición de la cámara
+  // Actualizar las coordenadas X y Z basadas en la dirección del joystick
+  position.x += moveDirection.x;
+  position.z += moveDirection.z;
+
+  // Actualizar la posición de la cámara en la escena
   camera.setAttribute("position", position);
 }
 
