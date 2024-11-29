@@ -36,15 +36,15 @@
       }
 
       /* Estilo del joystick */
-      #joystick-container {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        width: 150px;
-        height: 150px;
-        z-index: 10;
-        display: none; /* Inicialmente oculto */
-      }
+        #joystick-container {
+          position: fixed;
+          bottom: 20px;
+          left: 20px;
+          width: 100px;
+          height: 100px;
+          z-index: 1000;
+        }
+
 
 
     </style>
@@ -327,56 +327,50 @@
       
     </a-scene>
     <script>
-      // Detectar cuando la escena ha cargado completamente
+      // Detectar si el dispositivo es móvil
+      function isMobile() {
+        return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+      }
+
+      // Configurar joystick si es móvil
+      if (isMobile()) {
+        const joystickContainer = document.getElementById('joystick-container');
+        const joystick = nipplejs.create({
+          zone: joystickContainer,
+          mode: 'static',
+          position: { left: '50%', top: '50%' },
+          color: 'blue',
+        });
+
+        const camera = document.querySelector('#camara');
+        joystick.on('move', (evt, data) => {
+          if (data.direction) {
+            const speed = 0.1; // Velocidad de movimiento
+            const angle = data.angle.degree;
+
+            // Convertir ángulo en movimiento
+            const radian = (angle * Math.PI) / 180;
+            const dx = Math.sin(radian) * speed;
+            const dz = Math.cos(radian) * speed;
+
+            const position = camera.getAttribute('position');
+            camera.setAttribute('position', {
+              x: position.x + dx,
+              y: position.y,
+              z: position.z + dz,
+            });
+          }
+        });
+      }
+
+      // Ocultar la pantalla de carga cuando la escena está lista
       document.querySelector('a-scene').addEventListener('loaded', () => {
-        // Ocultar la pantalla de carga
         document.getElementById('loadingScreen').style.display = 'none';
       });
     </script>
-  
-  <script>
-    // Detectar si el usuario está en un dispositivo móvil
-    function isMobile() {
-      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-    }
 
-    if (isMobile()) {
-      // Mostrar el joystick
-      const joystickContainer = document.getElementById('joystick-container');
-      joystickContainer.style.display = 'block';
-
-      // Crear el joystick
-      const joystick = nipplejs.create({
-        zone: joystickContainer,
-        mode: 'static',
-        position: { left: '50px', bottom: '50px' },
-        color: 'blue'
-      });
-
-      // Control de movimiento de la cámara
-      const camera = document.querySelector('#camara');
-      joystick.on('move', (evt, data) => {
-        if (data && data.direction) {
-          const angle = data.angle.degree;
-          const force = data.force;
-          const speed = force * 0.1; // Ajustar velocidad
-
-          // Convertir ángulo a movimientos X y Z
-          const radian = (angle * Math.PI) / 180;
-          const deltaX = Math.cos(radian) * speed;
-          const deltaZ = Math.sin(radian) * speed;
-
-          // Actualizar posición de la cámara
-          const position = camera.getAttribute('position');
-          camera.setAttribute('position', {
-            x: position.x + deltaX,
-            y: position.y,
-            z: position.z + deltaZ
-          });
-        }
-      });
-    }
-  </script>
 
 
   
