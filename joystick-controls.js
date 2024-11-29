@@ -1,5 +1,6 @@
 // Variables globales
 let camera, joystick;
+let moveDirection = { x: 0, z: 0 };
 
 // Detectar si es móvil
 function isMobile() {
@@ -21,40 +22,56 @@ function initJoystick() {
   // Manejar los movimientos del joystick
   joystick.on("move", (event, data) => {
     if (data && data.angle && data.distance) {
-      moveCamera(data.angle.degree, data.distance / 100);
+      calculateMoveDirection(data.angle.degree, data.distance / 100);
     }
   });
 
   joystick.on("end", () => {
-    stopCamera();
+    stopMovement();
   });
+
+  startMovement();
+}
+
+// Calcular la dirección del movimiento
+function calculateMoveDirection(angle, speed) {
+  const radian = (angle * Math.PI) / 180; // Convertir ángulo a radianes
+  const scaledSpeed = speed || 0.1; // Escalar la velocidad basado en la distancia
+
+  // Calcular el vector de movimiento
+  moveDirection.x = Math.cos(radian) * scaledSpeed;
+  moveDirection.z = Math.sin(radian) * scaledSpeed;
+}
+
+// Detener el movimiento
+function stopMovement() {
+  moveDirection.x = 0;
+  moveDirection.z = 0;
+}
+
+// Iniciar el movimiento continuo
+function startMovement() {
+  const moveInterval = 10; // Intervalo en milisegundos
+  setInterval(() => {
+    if (moveDirection.x !== 0 || moveDirection.z !== 0) {
+      moveCamera();
+    }
+  }, moveInterval);
 }
 
 // Mover la cámara
-function moveCamera(angle, speed) {
-  const moveSpeed = speed || 0.1; // Escalar velocidad según distancia del joystick
-  const radian = (angle * Math.PI) / 180;
-
-  // Obtener dirección de la cámara
-  const direction = new THREE.Vector3();
-  camera.object3D.getWorldDirection(direction);
-
-  // Descomponer en componentes X y Z
-  const deltaX = Math.cos(radian) * moveSpeed;
-  const deltaZ = Math.sin(radian) * moveSpeed;
+function moveCamera() {
+  // Obtener la dirección de la cámara en el mundo
+  const cameraDirection = new THREE.Vector3();
+  camera.object3D.getWorldDirection(cameraDirection);
 
   // Calcular nueva posición
   const position = camera.getAttribute("position");
-  position.x += deltaX;
-  position.z += deltaZ;
+  position.x += moveDirection.x * cameraDirection.z - moveDirection.z * cameraDirection.x;
+  position.z += moveDirection.z * cameraDirection.z + moveDirection.x * cameraDirection.x;
 
   // Actualizar la posición de la cámara
   camera.setAttribute("position", position);
-}
-
-// Detener la cámara
-function stopCamera() {
-  // Aquí puedes implementar lógica adicional si se requiere
 }
 
 // Inicializar el sistema al cargar la página
