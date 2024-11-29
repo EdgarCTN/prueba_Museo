@@ -1,104 +1,383 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mapa Interactivo en A-Frame</title>
-  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@3.3.0/dist/aframe-physics-system.min.js"></script>
-  <script src="teletransporte.js"></script>
-  <script src="controladorCanciones.js"></script>
-  <script src="script_Paneles/highlight.js"></script>
-  <script src="script_Paneles/info-panel.js"></script>
-  <script src="script_Paneles/panel_auxiliar.js"></script>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-inspector@^0.9.3/dist/aframe-inspector.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@3.3.0/dist/aframe-physics-system.min.js"></script>
+    <script src="script_Paneles/highlight.js"></script>
+    <script src="script_Paneles/info-panel.js"></script>
+    <script src="script_Paneles/panel_auxiliar.js"></script>
+    <script src="teletransporte.js"></script>
+    <script src="controladorCanciones.js"></script>
+    <style>
+      /* Estilos para la pantalla de carga */
+      #loadingScreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #167faf; /* Fondo azul */
+        color: #fff; /* Texto blanco */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        font-size: 1.5em;
+        z-index: 9999; /* Asegúrate de que quede encima */
+        text-align: center;
+      }
 
-</head>
-<body>
-  <a-scene physics="gravity: -9.8">
-    <!-- Luces y cielo -->
-    <a-light type="ambient" color="#ffffff" intensity="1"></a-light>
-    <a-light type="directional" color="#ffffff" intensity="1" position="0 10 10"></a-light>
-    <a-sky color="#AAAAFF"></a-sky>
+      #loadingScreen img {
+        width: 400px; /* Ajusta el tamaño del logo */
+        margin-bottom: 20px;
+      }
 
-    <!-- Assets -->
-    <a-assets>
-      <audio id="song1" src="audio/cancion1.mp3"></audio>
-      <audio id="song2" src="audio/cancion2.mp3"></audio>
-      <audio id="song3" src="audio/cancion3.mp3"></audio>
-      <audio id="song4" src="audio/puentePiedra.mp3"></audio>
-
-      <img id="boton_Disco" src="imagenes/boton_Disco.png" />
-      <img id="musica_Fondo" src="imagenes/musica_Fondo.jpg" />
-      <img id="puentePiedra" src="imagenes/puentePiedra1.jpg" />
-      <img id="puentePiedraPoster" src="imagenes/puentePiedra_Poster.jpg" />
-      <img id="huallamarca" src="imagenes/huaca1.jpg" />
-      <img id="huallamarcaPoster" src="imagenes/huaca_Poster.jpg" />
-      <img id="santoDomingo" src="imagenes/santoDomingo.jpg" />
-      <img id="santoDomingoPoster" src="imagenes/santoDomingoPoster.jpg" />
-      <img id="textura_Mapa" src="imagenes/mapa_Fondo.jpg" />
-      <img id="franciscoPoster" src="imagenes/francisco_Poster.png" />
-      <img id="limaPoster" src="imagenes/lima.png" />
-      <img id="centroPoster" src="imagenes/centro.jpg" />
+      /* Estilo del joystick */
+      #joystick-container {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 150px;
+        height: 150px;
+        z-index: 10;
+        display: none; /* Inicialmente oculto */
+      }
 
 
+    </style>
+  
+  </head>
+  <body>
+    <div id="loadingScreen">
+      <img src="imagenes/logo.webp" alt="Logo del Museo Virtual" />
+      Estamos preparando el museo virtual...
+    </div>
+    <div id="joystick-container"></div>
 
-    </a-assets>
-    <!-- Assets -->
-    <a-assets>
-      <a-asset-item id="model-glb" src="assets/museo_Grupo_3.glb"></a-asset-item>
-      <a-asset-item id="model_2-glb" src="assets/santo_Domingo.glb"></a-asset-item>
-      <a-asset-item id="model_3-glb" src="assets/Huaca.glb"></a-asset-item>
-      <a-asset-item id="model_4-glb" src="assets/puente_Piedra.glb"></a-asset-item>
-      <a-asset-item id="model_5-glb" src="assets/matenme.glb"></a-asset-item>
-      <a-asset-item id="model_6-glb" src="assets/francis.glb"></a-asset-item>
+    <a-scene physics="gravity: -9.8">
+      <!-- Luces y cielo -->
+      <a-light type="ambient" color="#ffffff" intensity="1"></a-light>
+      <a-light type="directional" color="#ffffff" intensity="1" position="0 10 10"></a-light>
+      <a-light type="point" color="#ffffff" intensity="0.5" position="0 5 0"></a-light>
+      <a-sky color="#AAAAFF"></a-sky>
 
-      <img id="puentePiedra" src="imagenes/puentePiedra1.jpg" />
-      <img id="puentePiedraPoster" src="imagenes/puentePiedra_Poster.jpg" />
-      <img id="huallamarca" src="imagenes/huaca1.jpg" />
-      <img id="huallamarcaPoster" src="imagenes/huaca_Poster.jpg" />
-      <img id="santoDomingo" src="imagenes/santoDomingo.jpg" />
-      <img id="santoDomingoPoster" src="imagenes/santoDomingoPoster.jpg" />
-      <img id="textura_Panel" src="imagenes/textura_Panel.jpg" />
-      <img id="franciscoPoster" src="imagenes/francisco_Poster.png" />
-      <img id="limaPoster" src="imagenes/lima.png" />
-      <img id="brujula" src="imagenes/brujula.png" />
-    </a-assets>
+      <!-- Modelos -->
+      <a-assets>
+        <a-asset-item id="model-glb" src="assets/museo111.glb"></a-asset-item>
+        <a-asset-item id="model_2-glb" src="assets/santo_Domingo.glb"></a-asset-item>
+        <a-asset-item id="model_3-glb" src="assets/Huaca.glb"></a-asset-item>
+        <a-asset-item id="model_4-glb" src="assets/puente_Piedra.glb"></a-asset-item>
+        <a-asset-item id="model_5-glb" src="assets/matenme.glb"></a-asset-item>
+        <a-asset-item id="model_6-glb" src="assets/francis.glb"></a-asset-item>
+          
+        <audio id="song1" src="audio/cancion1.mp3"></audio>
+        <audio id="song2" src="audio/cancion2.mp3"></audio>
+        <audio id="song3" src="audio/cancion3.mp3"></audio>
+        <audio id="song4" src="audio/puentePiedra.mp3"></audio>
+  
+        
+        <!-- Imágenes -->
+  
 
-    <!-- Modelos en la escena -->
-    <a-entity gltf-model="#model-glb" position="0 0 0" scale="1 1 1" static-body></a-entity>
-    <a-entity gltf-model="#model_2-glb" position="0 0.1 -70" scale="0.2 0.2 0.2" rotation="0 135 0" static-body></a-entity>
-    <a-entity gltf-model="#model_3-glb" position="0 0.1 70" scale="0.7 0.7 0.7" rotation="0 90 0" static-body></a-entity>
-    <a-entity gltf-model="#model_4-glb" position="75 0.1 -37" scale="1 1 1.1" rotation="0 0 0" static-body></a-entity>
-    <a-entity gltf-model="#model_6-glb" position="-75 0.1 -5" scale="0.2 0.2 0.2" rotation="0 135 0" static-body></a-entity>
+        <img id="franciscoPoster" src="imagenes/francisco_Poster.webp" />
+        <img id="francisco1" src="imagenes/francisco.webp" />
+        <img id="santoDomingo" src="imagenes/santoDomingo.webp" />
+        <img id="santoDomingoPoster" src="imagenes/santoDomingoPoster.webp" />
+        <img id="huallamarca" src="imagenes/huaca1.webp" />
+        <img id="huallamarcaPoster" src="imagenes/huaca_Poster.webp" />
+        <img id="franciscoPoster" src="imagenes/francisco_Poster.webp" />
+        <img id="francisco1" src="imagenes/francisco.webp"/>
+        <img id="puentePiedra" src="imagenes/puentePiedra1.webp" />
+        <img id="puentePiedraPoster" src="imagenes/puentePiedra_Poster.webp" />
 
+        <img id="boton_Disco" src="imagenes/boton_Disco.webp" />
+        <img id="musica_Fondo" src="imagenes/musica_Fondo.webp" />
+        <img id="musica" src="imagenes/musica.webp" />
+
+        <img id="textura_Mapa" src="imagenes/mapa_Fondo.webp" />
+
+        <img id="instruccionesPoster" src="imagenes/instruccionesPoster.webp" />
+        <img id="instrucciones" src="imagenes/instrucciones.webp" />
+
+        <img id="brujula" src="imagenes/brujula.webp" />
+
+
+        <!-- Mixins -->
+        <a-mixin
+          id="frame"
+          geometry="primitive: plane; width: 1.8; height: 2.4"
+          material="color: white; shader: flat"
+          animation__scale="property: scale; to: 1.2 1.2 1.2; dur: 200; startEvents: mouseenter"
+          animation__scale_reverse="property: scale; to: 1 1 1; dur: 200; startEvents: mouseleave"
+        ></a-mixin>
+
+        <a-mixin
+          id="poster"
+          geometry="primitive: plane; width:1.66; height: 2.32"
+          material="shader: flat"
+          position="0 0 0.005"
+        ></a-mixin>
+
+        <a-mixin
+          id="infoImage"
+          geometry="primitive: plane; width: 1.5; height: 0.81"
+          material="shader: flat; transparent: true"
+          position="0 0.495 0.002"
+        ></a-mixin>
+        
+      </a-assets>
+
+      <!-- Modelos en la escena -->
+      <a-entity gltf-model="#model-glb" position="0 0 0" scale="1 1 1" static-body></a-entity>
+      <a-entity gltf-model="#model_2-glb" position="0 0.1 -70" scale="0.2 0.2 0.2" rotation="0 135 0" static-body></a-entity>
+      <a-entity gltf-model="#model_3-glb" position="0 0.1 70" scale="0.7 0.7 0.7" rotation="0 90 0" static-body></a-entity>
+      <a-entity gltf-model="#model_4-glb" position="75 0.1 -37" scale="1 1 1.1" rotation="0 0 0" static-body></a-entity>
+      <a-entity gltf-model="#model_6-glb" position="-75 0.1 -5" scale="0.2 0.2 0.2" rotation="0 135 0" static-body></a-entity>
     <!-- Paneles de control de canciones -->
           <!--  huaca -->
-    <a-entity controlador-canciones="id: panel1; position: -5 3 50; rotation: 0 120 0; songs: #song1, #song2, #song3"></a-entity>
-    <a-entity mapa-interactivo="idMapa: mapa1; position: -5.9 3 47; rotation: 0 90 0"></a-entity>
+          <a-entity controlador-canciones="id: panel1; position: -5 3 50; rotation: 0 120 0; songs: #song1, #song2, #song3"></a-entity>
+          <a-entity mapa-interactivo="idMapa: mapa1; position: -5.9 3 47; rotation: 0 90 0"></a-entity>
+      
+                <!--  Convento santo domingo -->
+          <a-entity controlador-canciones="id: panel2; position:  5 3 -50; rotation: 0 -60 0; songs: #song1, #song2, #song4"></a-entity>
+          <a-entity mapa-interactivo="idMapa: mapa2; position: 5.9 3 -47; rotation: 0 -90 0"></a-entity>
+      
+                <!--  Puente de piedra -->
+          <a-entity controlador-canciones="id: panel3; position: 50 3 5; rotation: 0 -150 0; songs: #song2, #song3, #song4"></a-entity>
+          <a-entity mapa-interactivo="idMapa: mapa4; position: 47 3 5.9; rotation: 0 180 0"></a-entity>
+      
+                <!--  San francisco -->
+          <a-entity controlador-canciones="id: panel4; position: -50 3 -5; rotation: 0 30 0; songs: #song1, #song3, #song4"></a-entity>
+          <a-entity mapa-interactivo="idMapa: mapa5; position: -47 3 -5.9; rotation: 0 0 0"></a-entity>
+      
+                <!-- Mapa del centro -->
+            <a-entity mapa-interactivo="idMapa: mapa3; position: 0 3 -2; rotation: 0 0 0"></a-entity>
+      
 
-          <!--  Convento santo domingo -->
-    <a-entity controlador-canciones="id: panel2; position:  5 3 -50; rotation: 0 -60 0; songs: #song1, #song2, #song4"></a-entity>
-    <a-entity mapa-interactivo="idMapa: mapa2; position: 5.9 3 -47; rotation: 0 -90 0"></a-entity>
 
-          <!--  Puente de piedra -->
-    <a-entity controlador-canciones="id: panel3; position: 50 3 5; rotation: 0 -150 0; songs: #song2, #song3, #song4"></a-entity>
-    <a-entity mapa-interactivo="idMapa: mapa4; position: 47 3 5.9; rotation: 0 180 0"></a-entity>
+      <!-- Cámara -->
+      <a-entity id="camara" camera wasd-controls look-controls position="0 3 0"></a-entity>
+      <a-entity cursor="rayOrigin: mouse" raycaster="objects: .raycastable"></a-entity>
 
-          <!--  San francisco -->
-    <a-entity controlador-canciones="id: panel4; position: -50 3 -5; rotation: 0 30 0; songs: #song1, #song3, #song4"></a-entity>
-    <a-entity mapa-interactivo="idMapa: mapa5; position: -47 3 -5.9; rotation: 0 0 0"></a-entity>
+      
 
-          <!-- Mapa del centro -->
-      <a-entity mapa-interactivo="idMapa: mapa3; position: 0 3 -2; rotation: 0 0 0"></a-entity>
+      <a-entity
+        id="background"
+        position="0 0 0"
+        geometry="primitive: sphere; radius: 2.0"
+        material="color: red; side: back; shader: flat"
+        scale="0.001 0.001 0.001"
+        visible="false"
+        class="raycastable"
+      ></a-entity>
 
-    <!-- Cámara -->
-    <a-entity id="camara" camera look-controls wasd-controls position="0 3 0">
-      <a-entity oculus-touch-controls hand="left"></a-entity>
-      <a-entity oculus-touch-controls hand="right"></a-entity>
-    </a-entity>
+      <!-- Cámara -->
+      <a-entity
+        position="0 1.6 0"
+        camera
+        look-controls="magicWindowTrackingEnabled: false; touchEnabled: true; mouseEnabled: true"
+        wasd-controls
+      >
+        <a-entity
+          id="fadeBackground"
+          geometry="primitive: sphere; radius: 2.5"
+          material="color: #ff0000; blending: normal"
 
-    <!-- Cursor -->
-    <a-entity cursor="rayOrigin: mouse" raycaster="objects: .raycastable"></a-entity>
-  </a-scene>
-</body>
+
+          visible="false"
+        ></a-entity>
+      </a-entity>
+
+      <!-- Interfaz de usuario -->
+      <a-entity id="ui" position="0 1.6 -2.5">
+        <!-- Menú -->
+        <a-entity id="menu" highlight>
+          <!-- Botones -->
+          
+          <a-entity
+            id="franciscoButton"
+            position="-50 1 7"
+            mixin="frame"
+            rotation="0 130 0" 
+            class="raycastable menu-button"
+          >
+          <a-entity material="src: #franciscoPoster;" mixin="poster"></a-entity>
+          </a-entity>
+
+
+
+          <a-entity
+            id="huallamarcaButton"
+            position="4 1 53"
+            mixin="frame"
+            rotation="0 240 0" 
+            class="raycastable menu-button"
+          >
+          <a-entity material="src: #huallamarcaPoster;" mixin="poster"></a-entity>
+          </a-entity>
+          
+
+          <a-entity
+            id="puentePiedraButton"
+            position="50 1 -1"
+            mixin="frame"
+            rotation="0 310 0" 
+            class="raycastable menu-button"
+          >
+            <a-entity material="src: #puentePiedraPoster;" mixin="poster"></a-entity>
+          </a-entity>
+
+
+
+
+          <a-entity
+            id="santoDomingoButton"
+            position="-4 1 -48"
+            mixin="frame"
+            rotation="0 45 0" 
+            class="raycastable menu-button"
+          >
+            <a-entity material="src: #santoDomingoPoster;" mixin="poster"></a-entity>
+          </a-entity>
+
+
+          <a-entity
+            id="instruccionesButton"
+            position="6 1 3"
+            mixin="frame"
+            rotation="0 -90 0" 
+            class="raycastable menu-button"
+          >
+            <a-entity material="src: #instrucciones;" mixin="poster"></a-entity>
+          </a-entity>
+
+        </a-entity>
+
+        <!-- Panel de Información -->
+        <a-entity
+          id="infoPanel"
+          position="0 0 0.5"
+          info-panel
+          visible="false"
+          scale="0.001 0.001 0.001"
+          geometry="primitive: plane; width: 1.5; height: 1.8"
+          material="color: #333333; shader: flat; transparent: false"
+          class="raycastable"
+        >
+          <!-- Contenido del Panel -->
+
+          <a-entity
+            id="franciscoInfoImage"
+            mixin="infoImage"
+            material="src: #francisco1"
+            visible="false"
+           ></a-entity>
+
+
+          <a-entity
+            id="puentePiedraInfoImage"
+            mixin="infoImage"
+            material="src: #puentePiedra"
+            visible="false"
+          ></a-entity>
+
+          <a-entity
+            id="huallamarcaInfoImage"
+            mixin="infoImage"
+            material="src: #huallamarca"
+            visible="false"
+          ></a-entity>
+
+          <a-entity
+            id="santoDomingoInfoImage"
+            mixin="infoImage"
+            material="src: #santoDomingo"
+            visible="false"
+          ></a-entity>
+
+          <a-entity
+          id="instruccionesInfoImage"
+          mixin="infoImage"
+          material="src: #musica"
+          visible="false"
+        ></a-entity>
+        <a-entity
+        id="instruccionesInfoImage2"
+        mixin="infoImage"
+        material="src: #musica"
+        visible="false"
+      ></a-entity>
+          <!-- Títulos y Descripciones -->
+          <a-entity
+            id="infoTitle"
+            position="-0.68 -0.1 0"
+            text="shader: msdf; anchor: left; width: 1.5; font: https://cdn.aframe.io/examples/ui/Viga-Regular.json; color: white; value: Titulo"
+          ></a-entity>
+          <a-entity
+            id="infoDescription"
+            position="-0.68 -0.2 0"
+            text="baseline: top; shader: msdf; anchor: left; font: https://cdn.aframe.io/examples/ui/Viga-Regular.json; color: white; value: Descripcion"
+          ></a-entity>
+        </a-entity>
+      </a-entity>
+
+      
+    </a-scene>
+    <script>
+      // Detectar cuando la escena ha cargado completamente
+      document.querySelector('a-scene').addEventListener('loaded', () => {
+        // Ocultar la pantalla de carga
+        document.getElementById('loadingScreen').style.display = 'none';
+      });
+    </script>
+  
+  <script>
+    // Detectar si el usuario está en un dispositivo móvil
+    function isMobile() {
+      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+    }
+
+    if (isMobile()) {
+      // Mostrar el joystick
+      const joystickContainer = document.getElementById('joystick-container');
+      joystickContainer.style.display = 'block';
+
+      // Crear el joystick
+      const joystick = nipplejs.create({
+        zone: joystickContainer,
+        mode: 'static',
+        position: { left: '50px', bottom: '50px' },
+        color: 'blue'
+      });
+
+      // Control de movimiento de la cámara
+      const camera = document.querySelector('#camara');
+      joystick.on('move', (evt, data) => {
+        if (data && data.direction) {
+          const angle = data.angle.degree;
+          const force = data.force;
+          const speed = force * 0.1; // Ajustar velocidad
+
+          // Convertir ángulo a movimientos X y Z
+          const radian = (angle * Math.PI) / 180;
+          const deltaX = Math.cos(radian) * speed;
+          const deltaZ = Math.sin(radian) * speed;
+
+          // Actualizar posición de la cámara
+          const position = camera.getAttribute('position');
+          camera.setAttribute('position', {
+            x: position.x + deltaX,
+            y: position.y,
+            z: position.z + deltaZ
+          });
+        }
+      });
+    }
+  </script>
+
+
+  
+  </body>
 </html>
