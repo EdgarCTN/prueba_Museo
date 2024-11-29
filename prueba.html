@@ -5,6 +5,7 @@
     <script src="https://unpkg.com/aframe-inspector@^0.9.3/dist/aframe-inspector.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.8.1/dist/nipplejs.min.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.0/nipplejs.min.js"></script>
 
     <script src="script_Paneles/highlight.js"></script>
@@ -12,6 +13,8 @@
     <script src="script_Paneles/panel_auxiliar.js"></script>
     <script src="teletransporte.js"></script>
     <script src="controladorCanciones.js"></script>
+    <script src="joystick-controls.js"></script>
+
     <style>
       /* Estilos para la pantalla de carga */
       #loadingScreen {
@@ -37,28 +40,17 @@
         margin-bottom: 20px;
       }
 
-      /* Estilo del joystick */
-        #joystickContainer {
-          position: fixed;
-          bottom: 10%;
-          left: 10%;
-          width: 150px;
-          height: 150px;
-          z-index: 1000;
-        }
-
-
-
 
     </style>
   
   </head>
   <body>
+    <div id="joystickContainer"></div>
+
     <div id="loadingScreen">
       <img src="imagenes/logo.webp" alt="Logo del Museo Virtual" />
       Estamos preparando el museo virtual...
     </div>
-    <div id="joystick-container"></div>
 
     <a-scene physics="gravity: -9.8">
       <!-- Luces y cielo -->
@@ -75,12 +67,25 @@
         <a-asset-item id="model_4-glb" src="assets/puente_Piedra.glb"></a-asset-item>
         <a-asset-item id="model_5-glb" src="assets/matenme.glb"></a-asset-item>
         <a-asset-item id="model_6-glb" src="assets/francis.glb"></a-asset-item>
-          
+        
+        
         <audio id="song1" src="audio/cancion1.mp3"></audio>
         <audio id="song2" src="audio/cancion2.mp3"></audio>
         <audio id="song3" src="audio/cancion3.mp3"></audio>
-        <audio id="song4" src="audio/puentePiedra.mp3"></audio>
-  
+        <audio id="song4" src="audio/cancion4.mp3"></audio>
+        <audio id="song5" src="audio/cancion5.mp3"></audio>
+        <audio id="song6" src="audio/cancion6.mp3"></audio>
+        <audio id="song7" src="audio/cancion7.mp3"></audio>
+        <audio id="song8" src="audio/cancion8.mp3"></audio>
+
+
+
+
+        <audio id="song_huaca" src="audio/huaca1.mp3"></audio>
+        <audio id="song_Puente" src="audio/puentePiedra1.mp3"></audio>
+        <audio id="song_Domingo" src="audio/santo_Domingo1.mp3"></audio>
+        <audio id="song_Francisco" src="audio/San Francisco1.mp3"></audio>
+
         
         <!-- Imágenes -->
   
@@ -104,6 +109,8 @@
 
         <img id="instruccionesPoster" src="imagenes/instruccionesPoster.webp" />
         <img id="instrucciones" src="imagenes/instrucciones.webp" />
+        <img id="instrucciones2" src="imagenes/mapa_capturaDePantalla.webp" />
+
 
         <img id="brujula" src="imagenes/brujula.webp" />
 
@@ -136,24 +143,24 @@
       <!-- Modelos en la escena -->
       <a-entity gltf-model="#model-glb" position="0 0 0" scale="1 1 1" static-body></a-entity>
       <a-entity gltf-model="#model_2-glb" position="0 0.1 -70" scale="0.2 0.2 0.2" rotation="0 135 0" static-body></a-entity>
-      <a-entity gltf-model="#model_3-glb" position="0 0.1 70" scale="0.7 0.7 0.7" rotation="0 90 0" static-body></a-entity>
+      <a-entity gltf-model="#model_3-glb" position="0 0.2 68" scale="0.6 0.6 0.6" rotation="0 90 0" static-body></a-entity>
       <a-entity gltf-model="#model_4-glb" position="75 0.1 -37" scale="1 1 1.1" rotation="0 0 0" static-body></a-entity>
       <a-entity gltf-model="#model_6-glb" position="-75 0.1 -5" scale="0.2 0.2 0.2" rotation="0 135 0" static-body></a-entity>
     <!-- Paneles de control de canciones -->
           <!--  huaca -->
-          <a-entity controlador-canciones="id: panel1; position: -5 3 50; rotation: 0 120 0; songs: #song1, #song2, #song3"></a-entity>
+          <a-entity controlador-canciones="id: panel1; position: -5 3 50; rotation: 0 120 0; songs: #song1, #song_huaca, #song2"></a-entity>
           <a-entity mapa-interactivo="idMapa: mapa1; position: -5.9 3 47; rotation: 0 90 0"></a-entity>
       
                 <!--  Convento santo domingo -->
-          <a-entity controlador-canciones="id: panel2; position:  5 3 -50; rotation: 0 -60 0; songs: #song1, #song2, #song4"></a-entity>
+          <a-entity controlador-canciones="id: panel2; position:  5 3 -50; rotation: 0 -60 0; songs: #song3, #song_Domingo, #song4"></a-entity>
           <a-entity mapa-interactivo="idMapa: mapa2; position: 5.9 3 -47; rotation: 0 -90 0"></a-entity>
       
                 <!--  Puente de piedra -->
-          <a-entity controlador-canciones="id: panel3; position: 50 3 5; rotation: 0 -150 0; songs: #song2, #song3, #song4"></a-entity>
+          <a-entity controlador-canciones="id: panel3; position: 50 3 5; rotation: 0 -150 0; songs: #song5, #song_Puente, #song6"></a-entity>
           <a-entity mapa-interactivo="idMapa: mapa4; position: 47 3 5.9; rotation: 0 180 0"></a-entity>
       
                 <!--  San francisco -->
-          <a-entity controlador-canciones="id: panel4; position: -50 3 -5; rotation: 0 30 0; songs: #song1, #song3, #song4"></a-entity>
+          <a-entity controlador-canciones="id: panel4; position: -50 3 -5; rotation: 0 30 0; songs: #song7, #song_Francisco, #song8"></a-entity>
           <a-entity mapa-interactivo="idMapa: mapa5; position: -47 3 -5.9; rotation: 0 0 0"></a-entity>
       
                 <!-- Mapa del centro -->
@@ -249,13 +256,25 @@
 
           <a-entity
             id="instruccionesButton"
-            position="6 1 3"
+            position="6 1.5 3"
             mixin="frame"
             rotation="0 -90 0" 
             class="raycastable menu-button"
           >
             <a-entity material="src: #instrucciones;" mixin="poster"></a-entity>
           </a-entity>
+
+          
+          <a-entity
+            id="instrucciones2Button"
+            position="-6 1.5 3"
+            mixin="frame"
+            rotation="0 90 0" 
+            class="raycastable menu-button"
+          >
+            <a-entity material="src: #instrucciones;" mixin="poster"></a-entity>
+          </a-entity>
+
 
         </a-entity>
 
@@ -307,12 +326,15 @@
           material="src: #musica"
           visible="false"
         ></a-entity>
+        
         <a-entity
-        id="instruccionesInfoImage2"
+        id="instrucciones2InfoImage"
         mixin="infoImage"
-        material="src: #musica"
+        material="src: #instrucciones2"
         visible="false"
       ></a-entity>
+
+
           <!-- Títulos y Descripciones -->
           <a-entity
             id="infoTitle"
@@ -330,69 +352,12 @@
       
     </a-scene>
     <script>
-      // Ocultar la pantalla de carga cuando la escena está lista
+      // Detectar cuando la escena ha cargado completamente
       document.querySelector('a-scene').addEventListener('loaded', () => {
+        // Ocultar la pantalla de carga
         document.getElementById('loadingScreen').style.display = 'none';
       });
     </script>
-    <script>
-      // Variables globales
-      const camera = document.querySelector("#camera");
-      let joystick = null;
 
-      // Detectar si es móvil
-      function isMobile() {
-        return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
-      }
-
-      // Inicializar el joystick
-      function initJoystick() {
-        const joystickContainer = document.getElementById("joystickContainer");
-
-        // Crear el joystick usando nipplejs
-        joystick = nipplejs.create({
-          zone: joystickContainer,
-          mode: "static",
-          position: { left: "50px", bottom: "50px" },
-          color: "blue",
-        });
-
-        // Manejar los movimientos del joystick
-        joystick.on("move", (event, data) => {
-          if (data.direction) {
-            const moveSpeed = 0.1; // Velocidad de movimiento
-            let position = camera.getAttribute("position");
-
-            // Ajustar la posición basado en la dirección
-            switch (data.direction.angle) {
-              case "up":
-                position.z -= moveSpeed;
-                break;
-              case "down":
-                position.z += moveSpeed;
-                break;
-              case "left":
-                position.x -= moveSpeed;
-                break;
-              case "right":
-                position.x += moveSpeed;
-                break;
-            }
-
-            // Actualizar la posición de la cámara
-            camera.setAttribute("position", position);
-          }
-        });
-      }
-
-      // Si el dispositivo es móvil, inicializa el joystick
-      if (isMobile()) {
-        initJoystick();
-      }
-    </script>
-
-
-
-  
   </body>
 </html>
